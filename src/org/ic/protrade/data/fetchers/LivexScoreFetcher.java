@@ -15,17 +15,8 @@ public final class LivexScoreFetcher {
 	private static final String FINISHED_URL = "http://www.livexscores.com/xml/tfinished.txt";
 	private static final String ALL_URL = "http://www.livexscores.com/xml/tall.txt";
 	private static final String YESTERDAY_URL = "http://www.livexscores.com/xml/tyesterday.txt";
-	
-	private LivexScoreFetcher(){}
 
-	public static void main(String args[]) {
-		try {
-			log.info("Starting to fetch scores");
-			String scores = fetchScores(LivexMatchType.YESTERDAY);
-			log.info("Scores fetched: " + scores);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	private LivexScoreFetcher() {
 	}
 
 	public static String fetchScores(LivexMatchType matchType)
@@ -54,9 +45,9 @@ public final class LivexScoreFetcher {
 		}
 		return scoresBuilder.toString();
 	}
-	
+
 	public enum LivexMatchType {
-	    YESTERDAY, FINISHED, IN_PLAY, ALL;
+		YESTERDAY, FINISHED, IN_PLAY, ALL;
 	}
 
 }

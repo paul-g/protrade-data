@@ -3,7 +3,7 @@ package org.ic.protrade.data.demo;
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
-import org.ic.protrade.data.NoSuchMatchException;
+import org.ic.protrade.data.exceptions.NoSuchMatchException;
 import org.ic.protrade.data.fetchers.LivexScoreFetcher.LivexMatchType;
 import org.ic.protrade.data.fetchers.Match;
 import org.ic.protrade.data.fetchers.LivexScoreFetcher;

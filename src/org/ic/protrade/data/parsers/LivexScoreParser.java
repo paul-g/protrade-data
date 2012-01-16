@@ -1,7 +1,7 @@
 package org.ic.protrade.data.parsers;
 
 import org.apache.log4j.Logger;
-import org.ic.protrade.data.NoSuchMatchException;
+import org.ic.protrade.data.exceptions.NoSuchMatchException;
 import org.ic.protrade.data.fetchers.Match;
 
 public final class LivexScoreParser {

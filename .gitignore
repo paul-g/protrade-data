@@ -1,0 +1,31 @@
+# Compiled source #
+###################
+*.class
+build/*
+
+# Eclipse Stuff #
+#################
+build.properties
+.classpath
+.project
+.settings/
+bin/
+
+# Log info #
+############
+*.log
+
+# All local properties #
+########################
+*.local
+
+# Test reports #
+################
+test-coverage
+cobertura.ser
+
+# Other #
+#########
+*.dump
+*.html
+*.pdf

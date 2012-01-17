@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 // Utilities used for inflating the decompressed betfair API calls
-public class DecompressionUtils {
+public final class DecompressionUtils {
 
 	private DecompressionUtils() {
 		// prevent instantiation

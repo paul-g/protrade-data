@@ -12,7 +12,7 @@ To install ant, follow the instructions here: http://ant.apache.org/.
 
 Use ant -p to list all available tasks.
 
-To intall the project:
+To install the project:
 
 1. get the code from Github (i.e. here)
 2. run make -> this task will: 1. fetch ivy (required for managing dependencies) 2. resolve dependencies and 3. run a standard build

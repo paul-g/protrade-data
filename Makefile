@@ -5,3 +5,5 @@ git-all:
 	ant -logger $(LOGGER) git-all
 clean:
 	ant clean
+clean-lib:
+	ant clean-lib

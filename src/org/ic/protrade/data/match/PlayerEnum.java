@@ -12,8 +12,9 @@ public enum PlayerEnum {
          * @return If the first argument is PLAYER1 returns the second argument else returns the third argument.
          */
         public static <T> T casePlayer(PlayerEnum player, T ifPlayerOneReturnValue, T ifPlayerTwoReturnValue){
-        	if (player == PLAYER1) 
+        	if (player == PLAYER1) {
         		return ifPlayerOneReturnValue;
+        	}
         	return ifPlayerTwoReturnValue;
         }
         

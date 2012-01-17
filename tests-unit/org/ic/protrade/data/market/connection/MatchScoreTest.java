@@ -18,30 +18,30 @@ public class MatchScoreTest {
 
 	@Test
 	public void testFirstPlayerScore() {
-		assertEquals(2, matchScore.getFirstPlayerScore());
+		assertEquals("Set score should be 2 - 1", 2, matchScore.getFirstPlayerScore());
 	}
 
 	@Test
 	public void testSecondPlayerScore() {
-		assertEquals(1, matchScore.getSecondPlayerScore());
+		assertEquals("Set score should be 2 - 1", 1, matchScore.getSecondPlayerScore());
 	}
 
 	@Test
 	public void testFirstPlayerLastName() {
 		matchScore.setFirstPlayerLastName("Federer");
-		assertEquals("Federer", matchScore.getFirstPlayerLastName());
+		assertEquals("First player should be 'Federer' ", "Federer", matchScore.getFirstPlayerLastName());
 	}
 
 	@Test
 	public void testEquals() {
 		MatchScore secondMatchScore = new MatchScore(2, 1);
-		assertTrue(matchScore.equals(secondMatchScore));
+		assertTrue("The two different match score objects with the same values should be equal", matchScore.equals(secondMatchScore));
 		secondMatchScore = new MatchScore(1, 2);
-		assertFalse(matchScore.equals(secondMatchScore));
+		assertFalse("Two diferrent valued match score should not be equal", matchScore.equals(secondMatchScore));
 	}
 
 	@Test
 	public void testHashCode() {
-		assertEquals(21, matchScore.hashCode());
+		assertEquals("Hash code is not as expected", 21, matchScore.hashCode());
 	}
 }

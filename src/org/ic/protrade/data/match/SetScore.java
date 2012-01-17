@@ -2,122 +2,118 @@ package org.ic.protrade.data.match;
 
 public class SetScore {
 
-	private int playerOneGames;
-	private int playerTwoGames;
+    private int playerOneGames;
+    private int playerTwoGames;
 
-	private int tiebreakPointsPlayerOne;
-	private int tiebreakPointsPlayerTwo;
+    private int tiebreakPointsPlayerOne;
+    private int tiebreakPointsPlayerTwo;
 
-	private PlayerEnum winner;
+    private PlayerEnum winner;
 
-	public SetScore() {
-	}
+    public SetScore() {
+    }
 
-	public SetScore(int playerOneGames, int playerTwoGames) {
-		this.playerOneGames = playerOneGames;
-		this.playerTwoGames = playerTwoGames;
-		if (isFinished()) {
-			if (this.playerOneGames > this.playerTwoGames)
-				winner = PlayerEnum.PLAYER1;
-			else
-				winner = PlayerEnum.PLAYER2;
-		}
-	}
+    public SetScore(int playerOneGames, int playerTwoGames) {
+        this.playerOneGames = playerOneGames;
+        this.playerTwoGames = playerTwoGames;
+        if (isFinished()) {
+            winner = (playerOneGames > playerTwoGames ? PlayerEnum.PLAYER1
+                    : PlayerEnum.PLAYER2);
+        }
+    }
 
-	private void addPlayerGame(PlayerEnum player) {
+    private void addPlayerGame(PlayerEnum player) {
 
-		boolean isPlayerOne = player.equals(PlayerEnum.PLAYER1);
-		int games = (isPlayerOne ? playerOneGames : playerTwoGames);
-		int tiebreakPoints = (isPlayerOne ? tiebreakPointsPlayerOne
-				: tiebreakPointsPlayerTwo);
+        boolean isPlayerOne = player.equals(PlayerEnum.PLAYER1);
+        int games = (isPlayerOne ? playerOneGames : playerTwoGames);
+        int tiebreakPoints = (isPlayerOne ? tiebreakPointsPlayerOne
+                : tiebreakPointsPlayerTwo);
 
-		if (!isFinished()) {
-			if (!isTiebreak()) {
-				games++;
-			} else {
-				tiebreakPoints++;
-				if (tiebreakPoints >= 7
-						&& Math.abs(tiebreakPoints - opponentTieScore(player)) >= 2)
-					games++;
-			}
+        if (!isFinished()) {
+            if (!isTiebreak()) {
+                games++;
+            } else {
+                tiebreakPoints++;
+                if (tiebreakPoints >= 7
+                        && Math.abs(tiebreakPoints - opponentTieScore(player)) >= 2) {
+                    games++;
+                }
+            }
 
-			switch (player) {
-			case PLAYER1:
-				tiebreakPointsPlayerOne = tiebreakPoints;
-				playerOneGames = games;
-				break;
-			case PLAYER2:
-				tiebreakPointsPlayerTwo = tiebreakPoints;
-				playerTwoGames = games;
-				break;
-			}
-		}
+            if (PlayerEnum.PLAYER1.equals(player)) {
+                tiebreakPointsPlayerOne = tiebreakPoints;
+                playerOneGames = games;
+            } else {
+                tiebreakPointsPlayerTwo = tiebreakPoints;
+                playerTwoGames = games;
+            }
+        }
+        if (isFinished()) {
+            winner = player;
+        }
+    }
 
-		if (isFinished())
-			winner = player;
+    private int opponentTieScore(PlayerEnum player) {
+        if (PlayerEnum.PLAYER1.equals(player)) {
+            return tiebreakPointsPlayerTwo;
+        } else {
+            return tiebreakPointsPlayerOne;
+        }
+    }
 
-	}
+    public void addPlayerOneGame() {
+        addPlayerGame(PlayerEnum.PLAYER1);
+    }
 
-	private int opponentTieScore(PlayerEnum player) {
-		switch (player) {
-		case PLAYER1:
-			return tiebreakPointsPlayerTwo;
-		case PLAYER2:
-			return tiebreakPointsPlayerOne;
-		}
-		return 0;
-	}
+    public void addPlayerTwoGame() {
+        addPlayerGame(PlayerEnum.PLAYER2);
+    }
 
-	public void addPlayerOneGame() {
-		addPlayerGame(PlayerEnum.PLAYER1);
-	}
+    public void addPlayerOneGames(int games) {
+        for (int i = 0; i < games; i++) {
+            this.addPlayerOneGame();
+        }
+    }
 
-	public void addPlayerTwoGame() {
-		addPlayerGame(PlayerEnum.PLAYER2);
-	}
+    public void addPlayerTwoGames(int games) {
+        for (int i = 0; i < games; i++) {
+            this.addPlayerTwoGame();
+        }
+    }
 
-	public void addPlayerOneGames(int games) {
-		for (int i = 0; i < games; i++)
-			this.addPlayerOneGame();
-	}
+    public final boolean isFinished() {
+        return (playerOneGames == 7 || playerTwoGames == 7)
+                || (Math.abs(playerOneGames - playerTwoGames) >= 2 && (playerOneGames >= 6 || playerTwoGames >= 6));
+    }
 
-	public void addPlayerTwoGames(int games) {
-		for (int i = 0; i < games; i++)
-			this.addPlayerTwoGame();
-	}
+    public boolean isTiebreak() {
+        return (playerOneGames == playerTwoGames && playerOneGames == 6);
+    }
 
-	public boolean isFinished() {
-		return (playerOneGames == 7 || playerTwoGames == 7)
-				|| (Math.abs(playerOneGames - playerTwoGames) >= 2 && (playerOneGames >= 6 || playerTwoGames >= 6));
-	}
+    public int getPlayerOneGames() {
+        return playerOneGames;
+    }
 
-	public boolean isTiebreak() {
-		return (playerOneGames == playerTwoGames && playerOneGames == 6);
-	}
+    public int getPlayerTwoGames() {
+        return playerTwoGames;
+    }
 
-	public int getPlayerOneGames() {
-		return playerOneGames;
-	}
+    public int getTiebreakPointsPlayerOne() {
+        return tiebreakPointsPlayerOne;
+    }
 
-	public int getPlayerTwoGames() {
-		return playerTwoGames;
-	}
+    public int getTiebreakPointsPlayerTwo() {
+        return tiebreakPointsPlayerTwo;
+    }
 
-	public int getTiebreakPointsPlayerOne() {
-		return tiebreakPointsPlayerOne;
-	}
+    public PlayerEnum getWinner() {
+        return winner;
+    }
 
-	public int getTiebreakPointsPlayerTwo() {
-		return tiebreakPointsPlayerTwo;
-	}
-
-	public PlayerEnum getWinner() {
-		return winner;
-	}
-
-	public int getPlayerGames(PlayerEnum player) {
-		if (PlayerEnum.PLAYER1.equals(player))
-			return getPlayerOneGames();
-		return getPlayerTwoGames();
-	}
+    public int getPlayerGames(PlayerEnum player) {
+        if (PlayerEnum.PLAYER1.equals(player)) {
+            return getPlayerOneGames();
+        }
+        return getPlayerTwoGames();
+    }
 }

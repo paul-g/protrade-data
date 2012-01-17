@@ -7,6 +7,8 @@ import static org.junit.Assert.*;
 
 public class SetScoreTest extends ScoringTest{
 
+    private static final String SET_NOT_FINISHED = "Set not finished!";
+    private static final String SET_FINISHED_TOO_EARLY = "Set finished too early!";
     SetScore score = new SetScore();
     
     @Test
@@ -15,13 +17,13 @@ public class SetScoreTest extends ScoringTest{
         
         for (int i=0;i<5; i++) {
             score.addPlayerOneGame();
-            assertFalse(score.isFinished());
+            assertFalse(SET_FINISHED_TOO_EARLY, score.isFinished());
         }
         
         assertSetScoreIs(score, 5 , 0);
         
         score.addPlayerOneGame();
-        assertTrue(score.isFinished());
+        assertTrue(SET_NOT_FINISHED, score.isFinished());
     }
     
     @Test
@@ -30,16 +32,16 @@ public class SetScoreTest extends ScoringTest{
         for (int i=0;i<5; i++) {
             score.addPlayerOneGame();
             score.addPlayerTwoGame();
-            assertFalse(score.isFinished());
+            assertFalse(SET_FINISHED_TOO_EARLY, score.isFinished());
         }
 
         assertSetScoreIs(score, 5 , 5);
         
         score.addPlayerOneGame();
-        assertFalse(score.isFinished());
+        assertFalse(SET_FINISHED_TOO_EARLY, score.isFinished());
         
         score.addPlayerOneGame();
-        assertTrue(score.isFinished());
+        assertTrue(SET_NOT_FINISHED, score.isFinished());
     }
     
     
@@ -49,7 +51,7 @@ public class SetScoreTest extends ScoringTest{
         for (int i=0;i<6; i++) {
             score.addPlayerOneGame();
             score.addPlayerTwoGame();
-            assertFalse(score.isFinished());
+            assertFalse(SET_FINISHED_TOO_EARLY, score.isFinished());
         }
         
         assertSetScoreIs(score, 6 , 6);
@@ -64,11 +66,11 @@ public class SetScoreTest extends ScoringTest{
         //assertTiebrakeScoreIs(score, i, i);
         
         score.addPlayerOneGame();
-        assertFalse(score.isFinished());
+        assertFalse(SET_FINISHED_TOO_EARLY, score.isFinished());
         
         score.addPlayerOneGame();
         assertSetScoreIs(score,7,6);
-        assertTrue(score.isFinished());
+        assertTrue(SET_NOT_FINISHED, score.isFinished());
     }
     
 }

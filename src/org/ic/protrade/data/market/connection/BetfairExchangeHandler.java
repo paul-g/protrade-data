@@ -34,8 +34,9 @@ public class BetfairExchangeHandler extends BetfairConnectionHandler {
 		queriesNumber++;
 		for (EventMarketBetfair emb : eventBetfair.getChildren()) {
 			if (emb instanceof MarketBetfair
-					&& emb.getName().equals(MATCH_ODDS_MARKET_NAME))
+					&& emb.getName().equals(MATCH_ODDS_MARKET_NAME)) {
 				marketId = emb.getBetfairId();
+			}
 		}
 		MOddsMarketData modds = new MOddsMarketData();
 		try {
@@ -101,16 +102,18 @@ public class BetfairExchangeHandler extends BetfairConnectionHandler {
 			if (i == 0) {
 				modds.setPl1LastMatchedPrice(r.getLastPriceMatched());
 				modds.setPlayer1TotalAmountMatched(r.getTotalAmountMatched());
-				if (getNames)
+				if (getNames) {
 					modds.setPlayer1(marketRunner.getName());
+				}
 				modds.setPl1Back(setBackValues(r));
 				modds.setPl1Lay(setLayValues(r));
 				modds.setPlayer1SelectiondId(r.getSelectionId());
 			} else {
 				modds.setPl2LastMatchedPrice(r.getLastPriceMatched());
 				modds.setPlayer2TotalAmountMatched(r.getTotalAmountMatched());
-				if (getNames)
+				if (getNames) {
 					modds.setPlayer2(marketRunner.getName());
+				}
 				modds.setPl2Back(setBackValues(r));
 				modds.setPl2Lay(setLayValues(r));
 				modds.setPlayer2SelectionId(r.getSelectionId());
@@ -128,8 +131,9 @@ public class BetfairExchangeHandler extends BetfairConnectionHandler {
 		int marketId = -1;
 		for (EventMarketBetfair emb : eventBetfair.getChildren()) {
 			if (emb instanceof MarketBetfair
-					&& emb.getName().equals(SET_BETTING_MARKET_NAME))
+					&& emb.getName().equals(SET_BETTING_MARKET_NAME)) {
 				marketId = emb.getBetfairId();
+			}
 		}
 		try {
 			if (marketId == -1) {
@@ -191,10 +195,12 @@ public class BetfairExchangeHandler extends BetfairConnectionHandler {
 					markets = new MarketSummary[] {};
 				}
 				for (MarketSummary ms : markets) {
-					if (ms.getMarketName().equals(SET_BETTING_MARKET_NAME))
+					if (ms.getMarketName().equals(SET_BETTING_MARKET_NAME)) {
 						setBettingMarketId = ms.getMarketId();
-					if (ms.getMarketName().equals(MATCH_ODDS_MARKET_NAME))
+					}
+					if (ms.getMarketName().equals(MATCH_ODDS_MARKET_NAME)) {
 						mOddsMarketId = ms.getMarketId();
+					}
 				}
 			}
 			// create the string to display the Match Odds
@@ -402,16 +408,18 @@ public class BetfairExchangeHandler extends BetfairConnectionHandler {
 			if (i == 0) {
 				modds.setPl1LastMatchedPrice(r.getLastPriceMatched());
 				modds.setPlayer1TotalAmountMatched(r.getTotalAmountMatched());
-				if (getNames)
+				if (getNames) {
 					modds.setPlayer1(marketRunner.getName());
+				}
 				modds.setPl1Back(setBackValues(r));
 				modds.setPl1Lay(setLayValues(r));
 				modds.setPlayer1SelectiondId(r.getSelectionId());
 			} else {
 				modds.setPl2LastMatchedPrice(r.getLastPriceMatched());
 				modds.setPlayer2TotalAmountMatched(r.getTotalAmountMatched());
-				if (getNames)
+				if (getNames) {
 					modds.setPlayer2(marketRunner.getName());
+				}
 				modds.setPl2Back(setBackValues(r));
 				modds.setPl2Lay(setLayValues(r));
 				modds.setPlayer2SelectionId(r.getSelectionId());

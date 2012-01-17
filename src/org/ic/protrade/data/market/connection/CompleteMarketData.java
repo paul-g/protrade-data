@@ -7,7 +7,6 @@ public class CompleteMarketData {
 	private SetBettingMarketData setBettingMarketData;
 
 	public CompleteMarketData() {
-		;
 	}
 
 	public CompleteMarketData(MOddsMarketData mOdds,

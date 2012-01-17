@@ -46,14 +46,16 @@ public class Score {
     }
 
     private void addPlayerPoint(PlayerEnum player) {
-        if (isFinished())
+        if (isFinished()) {
             return;
+        }
 
         int playerPoints = (player.equals(PlayerEnum.PLAYER1) ? playerOnePoints
                 : playerTwoPoints);
 
-        if (currentSet.isTiebreak())
+        if (currentSet.isTiebreak()) {
             gameWon(player);
+        }
 
         switch (playerPoints) {
         case 0:
@@ -68,10 +70,11 @@ public class Score {
                 gameWon(player);
                 return;
             } else {
-                if (opponentScore(player) == AD)
+                if (opponentScore(player) == AD) {
                     playerOnePoints = playerTwoPoints = 40;
-                else
+                } else {
                     playerPoints = AD;
+                }
             }
             break;
         case 50:
@@ -79,16 +82,11 @@ public class Score {
             return;
         }
 
-        switch (player) {
-
-        case PLAYER1:
-            playerOnePoints = playerPoints;
-            break;
-        case PLAYER2:
+        if (PlayerEnum.PLAYER1.equals(player)) {
+            playerOnePoints = playerPoints;            
+        } else {
             playerTwoPoints = playerPoints;
-            break;
         }
-
     }
 
     public void addPlayerOnePoint() {
@@ -147,11 +145,7 @@ public class Score {
 
     public boolean isFinished() {
         int win = maximumSetsPlayed / 2 + 1;
-        if (getPlayerOneSets() >= win)
-            return true;
-        if (getPlayerTwoSets() >= win)
-            return true;
-        return false;
+        return getPlayerOneSets() >= win || getPlayerTwoSets() >= win;
     }
 
     public int getPlayerOneSets() {
@@ -166,10 +160,11 @@ public class Score {
 
         int setsWon = 0;
 
-        for (SetScore s : scores)
-            if (s.getWinner() == player)
+        for (SetScore s : scores) {
+            if (s.getWinner() == player) {
                 setsWon++;
-
+            }
+        }
         return setsWon;
     }
 
@@ -230,7 +225,7 @@ public class Score {
     }
 
     public PlayerEnum getWinner() throws MatchNotFinishedException {
-        if (!this.isFinished()) {
+        if (!isFinished()) {
             throw new MatchNotFinishedException();
         }
         if (getPlayerOneSets() > maximumSetsPlayed / 2) {

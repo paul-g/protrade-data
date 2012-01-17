@@ -19,11 +19,11 @@ public class MarketPricesTest {
 
 	@Test
 	public void testBackPrices() {
-		assertEquals(0, marketPrices.getBackPrices().size());
+		assertEquals("There should be no back prices!", 0, marketPrices.getBackPrices().size());
 	}
 
 	@Test
 	public void testLayPrices() {
-		assertEquals(0, marketPrices.getLayPrices().size());
+		assertEquals("There should be no lay prices!", 0, marketPrices.getLayPrices().size());
 	}
 }

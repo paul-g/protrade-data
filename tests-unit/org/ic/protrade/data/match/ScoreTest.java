@@ -70,8 +70,8 @@ public class ScoreTest extends ScoringTest {
 
         assertGameScoreIs(0,0);
         
-        assertNull(score.getSetScore(0));
-        assertNull(score.getSetScore(3));
+        assertNull("There should not be a set zero!", score.getSetScore(0));
+        assertNull("Third set should not have been played!", score.getSetScore(3));
         
         assertSetScoreIs(score.getSetScore(1), 6, 0);
     }
@@ -88,10 +88,10 @@ public class ScoreTest extends ScoringTest {
                 assertPointsScoreIs(expected[j], 0);
             }
         }
-        assertEquals(k+1, score.getPlayerOneSets());
+        assertEquals("Set score is not correct", k+1, score.getPlayerOneSets());
        }
        
-       assertTrue(score.isFinished());
+       assertTrue("Match not finished!", score.isFinished());
     }
     
     @Test
@@ -107,27 +107,27 @@ public class ScoreTest extends ScoringTest {
                 assertPointsScoreIs(expected[j], 0);
             }
         }
-        assertEquals(k+1, score.getPlayerOneSets());
+        assertEquals("Incorrect set score", k+1, score.getPlayerOneSets());
        }
        
-       assertTrue(score.isFinished());
+       assertTrue("Match not finished!", score.isFinished());
        
        // try to add more points but it shouldn't affect the score
        // since game is finished
        score.addPlayerOnePoint();
-       assertEquals(0, score.getPlayerOnePoints());
+       assertEquals("Points score was not reset!", 0, score.getPlayerOnePoints());
        assertPointsScoreIs(0,0);
        assertSetScoreIs(score.getSetScore(3), 6, 0);
     }
     
     private void assertPointsScoreIs(int playerOnePoints, int playerTwoPoints){
-        assertEquals(playerOnePoints, score.getPlayerOnePoints());
-        assertEquals(playerTwoPoints, score.getPlayerTwoPoints());
+        assertEquals("Player one points score does not match!" , playerOnePoints, score.getPlayerOnePoints());
+        assertEquals("Player two Points score does not match!", playerTwoPoints, score.getPlayerTwoPoints());
     }
     
     private void assertGameScoreIs(int playerOneGames, int playerTwoGames){
-        assertEquals(playerOneGames, score.getCurrentSetScore().getPlayerOneGames());
-        assertEquals(playerTwoGames, score.getCurrentSetScore().getPlayerTwoGames());
+        assertEquals("Player one game score does not match!", playerOneGames, score.getCurrentSetScore().getPlayerOneGames());
+        assertEquals("Player two game score does not match!", playerTwoGames, score.getCurrentSetScore().getPlayerTwoGames());
     }
     
 }

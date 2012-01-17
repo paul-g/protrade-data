@@ -10,9 +10,6 @@ public class AccountFunds {
     private double exposure;
     private double exposureLimit;
 
-    public AccountFunds() {
-    }
-    
     public AccountFunds(GetAccountFundsResp funds) {
         this.balance = funds.getBalance();
         this.available = funds.getAvailBalance();

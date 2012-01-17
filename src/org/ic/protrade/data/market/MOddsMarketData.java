@@ -18,11 +18,9 @@ public class MOddsMarketData {
 	private double player1PredictedOdds;
 	private double player2PredictedOdds;
 	private ArrayList<Pair<Double, Double>> pl1Lay, pl1Back, pl2Lay, pl2Back;
-	private final Date date;
 	private Date time;
 	private String exchange;
 	private String matchStatus;
-	private String location;
 	private int delay;
 
 	public MOddsMarketData() {
@@ -31,7 +29,6 @@ public class MOddsMarketData {
 		pl1Back = new ArrayList<Pair<Double, Double>>();
 		pl2Lay = new ArrayList<Pair<Double, Double>>();
 		pl2Back = new ArrayList<Pair<Double, Double>>();
-		date = null;
 	}
 
 	public String getPlayer1() {

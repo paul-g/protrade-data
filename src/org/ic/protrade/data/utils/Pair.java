@@ -1,6 +1,6 @@
 package org.ic.protrade.data.utils;
 
-public class Pair<T, K> {
+public final class Pair<T, K> {
   T first;
   K second;
   

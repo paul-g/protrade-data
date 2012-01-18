@@ -43,7 +43,22 @@ ant resolve   (resolve dependencies from maven central, using ivy)
 ant all       (run a standard build)
 ```
 
-## Done
+## Finally
+
+### Create config.local
+
+To enable automatic login and to allow running the tests which require a Betfair account, a config.local file must be created under the project root. This file must contain the Betfair user account and the encrypted password.
+
+```
+username:=yourusername
+password:=yourencryptedpassword
+```
+
+To help encrypt the password, a utility class is provided under:  org.ic.protrade.authentication.Encrypt.java.
+
+A simple task will be added soon.
+
+### Done
 
 If everything went well, you should be done at this stage :p
 

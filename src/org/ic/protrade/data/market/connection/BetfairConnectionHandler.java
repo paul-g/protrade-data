@@ -135,7 +135,7 @@ public class BetfairConnectionHandler {
 			}
 			for (MarketSummary ms : markets) {
 				tournaments.add(new MarketBetfair(ms.getMarketName(), ms
-						.getMarketId()));
+						.getMarketId(), ms.getExchangeId()));
 			}
 		} catch (Exception e) {
 			log.info("Error getting list of tournaments - " + e.getMessage());

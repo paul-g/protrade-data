@@ -31,11 +31,13 @@ public class BetfairExchangeHandler extends BetfairConnectionHandler {
 	public static MOddsMarketData getMatchOddsMarketData(LiveMatch match) {
 		EventBetfair eventBetfair = match.getEventBetfair();
 		int marketId = -1;
+		Exchange exchange = Exchange.UK;
 		queriesNumber++;
 		for (EventMarketBetfair emb : eventBetfair.getChildren()) {
 			if (emb instanceof MarketBetfair
 					&& emb.getName().equals(MATCH_ODDS_MARKET_NAME)) {
 				marketId = emb.getBetfairId();
+				exchange = ((MarketBetfair)emb).getExchangeId() == 1 ? Exchange.UK : Exchange.AUS;
 			}
 		}
 		MOddsMarketData modds = new MOddsMarketData();
@@ -52,14 +54,14 @@ public class BetfairExchangeHandler extends BetfairConnectionHandler {
 				}
 				for (MarketSummary ms : markets) {
 					if (ms.getMarketName().equals(MATCH_ODDS_MARKET_NAME)) {
-						// marketOdds = ms;
 						marketId = ms.getMarketId();
+						exchange = ms.getExchangeId() == 1 ? Exchange.UK : Exchange.AUS;
 					}
 				}
 			}
 			// create the string to display the Match Odds
 			if (marketId != -1) {
-				modds = getMatchOddsData(!match.isNamesSet(), marketId);
+				modds = getMatchOddsData(!match.isNamesSet(), marketId, exchange);
 			}
 		} catch (Exception e) {
 			log.info("Error fetching market info for the match - "
@@ -70,11 +72,9 @@ public class BetfairExchangeHandler extends BetfairConnectionHandler {
 	}
 
 	private static MOddsMarketData getMatchOddsData(boolean getNames,
-			int marketId) throws Exception {
+			int marketId, Exchange exchange) throws Exception {
 		MOddsMarketData modds = new MOddsMarketData();
-		// marketOdds.getExchangeId() == 1 ? Exchange.UK : Exchange.AUS;
 		Market selectedMarket = null;
-		Exchange exchange = Exchange.AUS;
 		if (getNames) {
 			selectedMarket = ExchangeAPI.getMarket(exchange, apiContext,
 					marketId);
@@ -129,10 +129,12 @@ public class BetfairExchangeHandler extends BetfairConnectionHandler {
 		EventBetfair eventBetfair = match.getEventBetfair();
 		SetBettingMarketData setBettingData = new SetBettingMarketData();
 		int marketId = -1;
+		Exchange exchange = Exchange.UK;
 		for (EventMarketBetfair emb : eventBetfair.getChildren()) {
 			if (emb instanceof MarketBetfair
 					&& emb.getName().equals(SET_BETTING_MARKET_NAME)) {
 				marketId = emb.getBetfairId();
+				exchange = ((MarketBetfair)emb).getExchangeId() == 1 ? Exchange.UK : Exchange.AUS;
 			}
 		}
 		try {
@@ -150,18 +152,18 @@ public class BetfairExchangeHandler extends BetfairConnectionHandler {
 					if (ms.getMarketName().equals(SET_BETTING_MARKET_NAME)) {
 						// marketOdds = ms;
 						marketId = ms.getMarketId();
+						exchange = ms.getExchangeId() == 1 ? Exchange.UK : Exchange.AUS;
 					}
 				}
 			}
 			// create the string to display the Match Odds
 			if (marketId != -1) {
-				setBettingData = getSetBettingData(match, marketId);
+				setBettingData = getSetBettingData(match, marketId, exchange);
 			}
 		} catch (Exception e) {
 			log.info("Error fetching market info for the match - "
 					+ e.getMessage());
 		}
-		// System.out.println("After Set odds get: " + queriesNumber);
 		return setBettingData;
 	}
 
@@ -174,15 +176,8 @@ public class BetfairExchangeHandler extends BetfairConnectionHandler {
 		queriesNumber++;
 		int setBettingMarketId = -1;
 		int mOddsMarketId = -1;
+		Exchange exchange = Exchange.UK;
 
-		/*
-		 * for (EventMarketBetfair emb : eventBetfair.getChildren()) { if (emb
-		 * instanceof MarketBetfair &&
-		 * emb.getName().equals(SET_BETTING_MARKET_NAME)) setBettingMarketId =
-		 * emb.getBetfairId(); if (emb instanceof MarketBetfair &&
-		 * emb.getName().equals(MATCH_ODDS_MARKET_NAME)) mOddsMarketId =
-		 * emb.getBetfairId(); }
-		 */
 		try {
 			if (setBettingMarketId == -1 || mOddsMarketId == -1) {
 				GetEventsResp resp = GlobalAPI.getEvents(apiContext,
@@ -197,6 +192,7 @@ public class BetfairExchangeHandler extends BetfairConnectionHandler {
 				for (MarketSummary ms : markets) {
 					if (ms.getMarketName().equals(SET_BETTING_MARKET_NAME)) {
 						setBettingMarketId = ms.getMarketId();
+						exchange = ms.getExchangeId() == 1 ? Exchange.UK : Exchange.AUS;
 					}
 					if (ms.getMarketName().equals(MATCH_ODDS_MARKET_NAME)) {
 						mOddsMarketId = ms.getMarketId();
@@ -205,10 +201,10 @@ public class BetfairExchangeHandler extends BetfairConnectionHandler {
 			}
 			// create the string to display the Match Odds
 			if (setBettingMarketId != -1) {
-				setBettingData = getSetBettingData(match, setBettingMarketId);
+				setBettingData = getSetBettingData(match, setBettingMarketId, exchange);
 			}
 			if (mOddsMarketId != -1) {
-				mOddsData = getMatchOddsData(!match.isNamesSet(), mOddsMarketId);
+				mOddsData = getMatchOddsData(!match.isNamesSet(), mOddsMarketId, exchange);
 			}
 		} catch (Exception e) {
 			log.info("Error fetching market info for the match - "
@@ -216,16 +212,15 @@ public class BetfairExchangeHandler extends BetfairConnectionHandler {
 		}
 		completeMarketData.setmOddsMarketData(mOddsData);
 		completeMarketData.setSetBettingMarketData(setBettingData);
-		// System.out.println("After complete odds get: " + queriesNumber);
 		return completeMarketData;
 	}
 
 	private static SetBettingMarketData getSetBettingData(LiveMatch match,
-			int setBettingMarketId) throws Exception {
+			int setBettingMarketId, Exchange exchange) throws Exception {
 		SetBettingMarketData setBettingData = new SetBettingMarketData();
-		Market selectedMarket = ExchangeAPI.getMarket(Exchange.UK, apiContext,
+		Market selectedMarket = ExchangeAPI.getMarket(exchange, apiContext,
 				setBettingMarketId);
-		InflatedMarketPrices prices = ExchangeAPI.getMarketPrices(Exchange.UK,
+		InflatedMarketPrices prices = ExchangeAPI.getMarketPrices(exchange,
 				apiContext, selectedMarket.getMarketId());
 
 		for (InflatedRunner r : prices.getRunners()) {
@@ -320,25 +315,22 @@ public class BetfairExchangeHandler extends BetfairConnectionHandler {
 		return result;
 	}
 
-	/*
-	 * public void getBetHistory() { // ExchangeAPI.getBetHistory(context, int
-	 * marketId, ) }
-	 */
-
 	public static MOddsMarketData getCompressedMatchOddsMarketData(
 			LiveMatch match) {
 		EventBetfair eventBetfair = match.getEventBetfair();
 		int marketId = -1;
+		Exchange exchange = Exchange.UK;
 		queriesNumber++;
 		for (EventMarketBetfair emb : eventBetfair.getChildren()) {
 			if (emb instanceof MarketBetfair
-					&& emb.getName().equals(MATCH_ODDS_MARKET_NAME))
+					&& emb.getName().equals(MATCH_ODDS_MARKET_NAME)) {
 				marketId = emb.getBetfairId();
+				exchange = ((MarketBetfair)emb).getExchangeId() == 1 ? Exchange.UK : Exchange.AUS;
+			}
 		}
 		MOddsMarketData modds = new MOddsMarketData();
 		try {
 			if (marketId == -1) {
-				System.out.println("do getEvents");
 				queriesNumber++;
 				GetEventsResp resp = GlobalAPI.getEvents(apiContext,
 						eventBetfair.getBetfairId());
@@ -352,46 +344,34 @@ public class BetfairExchangeHandler extends BetfairConnectionHandler {
 					if (ms.getMarketName().equals(MATCH_ODDS_MARKET_NAME)) {
 						// marketOdds = ms;
 						marketId = ms.getMarketId();
+						exchange = ms.getExchangeId() == 1 ? Exchange.UK : Exchange.AUS;
 					}
 				}
 			}
 			// create the string to display the Match Odds
 			if (marketId != -1) {
+				int pl1SelectionId = match.getLastMarketData() == null ? 0 : match.getLastMarketData().getPlayer1SelectiondId();
 				modds = getCompressedMatchOddsData(!match.isNamesSet(),
-						marketId);
+						marketId, exchange, match.getPlayerOne().getLastname(), pl1SelectionId);
 			}
 		} catch (Exception e) {
 			log.info("Error fetching market info for the match - "
 					+ e.getMessage());
 		}
-		// System.out.println("After Match odds get: " + queriesNumber);
 		return modds;
 	}
 
 	private static MOddsMarketData getCompressedMatchOddsData(boolean getNames,
-			int marketId) throws Exception {
+			int marketId, Exchange exchange, String pl1LastName, int pl1SelectionId) throws Exception {
 		MOddsMarketData modds = new MOddsMarketData();
-		// marketOdds.getExchangeId() == 1 ? Exchange.UK : Exchange.AUS;
 		Market selectedMarket = null;
-		Exchange exchange = Exchange.AUS;
-		if (getNames) {
+		if (getNames)
 			selectedMarket = ExchangeAPI.getMarket(exchange, apiContext,
 					marketId);
-		}
-		/*
-		 * InflatedMarketPrices prices =
-		 * ExchangeAPI.getMarketPrices(Exchange.UK, apiContext, marketId);
-		 */
 		InflatedCompleteMarketPrices prices = ExchangeAPI
 				.getCompleteMarketPrices(exchange, apiContext, marketId);
 
 		modds.setExchange(exchange.toString());
-		// modds.setDate(selectedMarket.getMarketTime().getTime());
-		// modds.setMatchStatus(selectedMarket.getMarketStatus().toString());//prices.getMarketStatus()
-
-		// modds.setMatchStatus(prices.getMarketStatus());
-
-		// modds.setLocation(selectedMarket.getCountryISO3());
 		modds.setDelay(prices.getInPlayDelay());
 
 		int i = 0;
@@ -405,23 +385,24 @@ public class BetfairExchangeHandler extends BetfairConnectionHandler {
 					}
 				}
 			}
-			if (i == 0) {
+			if ( (getNames && marketRunner.getName().contains(pl1LastName)) 
+				|| r.getSelectionId() == pl1SelectionId ) {
 				modds.setPl1LastMatchedPrice(r.getLastPriceMatched());
 				modds.setPlayer1TotalAmountMatched(r.getTotalAmountMatched());
-				if (getNames) {
+				if (getNames)
 					modds.setPlayer1(marketRunner.getName());
-				}
-				modds.setPl1Back(setBackValues(r));
-				modds.setPl1Lay(setLayValues(r));
+				int startIndex = getBestBackIndex(r);
+				modds.setPl1Back(setBackValues(r, startIndex));
+				modds.setPl1Lay(setLayValues(r, startIndex + 1));
 				modds.setPlayer1SelectiondId(r.getSelectionId());
 			} else {
 				modds.setPl2LastMatchedPrice(r.getLastPriceMatched());
 				modds.setPlayer2TotalAmountMatched(r.getTotalAmountMatched());
-				if (getNames) {
+				if (getNames)
 					modds.setPlayer2(marketRunner.getName());
-				}
-				modds.setPl2Back(setBackValues(r));
-				modds.setPl2Lay(setLayValues(r));
+				int startIndex = getBestBackIndex(r);
+				modds.setPl2Back(setBackValues(r, startIndex));
+				modds.setPl2Lay(setLayValues(r, startIndex + 1));
 				modds.setPlayer2SelectionId(r.getSelectionId());
 			}
 			i++;
@@ -429,31 +410,35 @@ public class BetfairExchangeHandler extends BetfairConnectionHandler {
 		return modds;
 	}
 
+	private static int getBestBackIndex(InflatedCompleteRunner r) {
+		int i;
+		for (i = 0; i < r.getPrices().size() - 1; i++)
+			if (r.getPrices().get(i + 1).getLayAmountAvailable() > 0)
+				return i;
+		return i;
+	}
+
 	private static ArrayList<Pair<Double, Double>> setBackValues(
-			InflatedCompleteRunner r) {
+			InflatedCompleteRunner r, int startIndex) {
 		ArrayList<Pair<Double, Double>> result = new ArrayList<Pair<Double, Double>>();
-		for (int i = 2; i >= 0; i--) {
-			InflatedCompletePrice p = r.getPrices().get(i);
+		int i = 0;
+		while (startIndex > 0 && i < 3) {
+			InflatedCompletePrice p = r.getPrices().get(startIndex);
 			result.add(pair(p.getPrice(), p.getBackAmountAvailable()));
-		}
-		/*
-		 * for (InflatedCompletePrice p : r.getPrices()) {
-		 * result.add(pair(p.getPrice(), p.getBackAmountAvailable())); }
-		 */
+			startIndex--; i++;
+		}		
 		return result;
 	}
 
 	private static ArrayList<Pair<Double, Double>> setLayValues(
-			InflatedCompleteRunner r) {
+			InflatedCompleteRunner r, int startIndex) {
 		ArrayList<Pair<Double, Double>> result = new ArrayList<Pair<Double, Double>>();
-		for (int i = 3; i < 6; i++) {
-			InflatedCompletePrice p = r.getPrices().get(i);
-			result.add(pair(p.getPrice(), p.getBackAmountAvailable()));
+		int i = 0;
+		while (startIndex < r.getPrices().size() && i < 3) {
+			InflatedCompletePrice p = r.getPrices().get(startIndex);
+			result.add(pair(p.getPrice(), p.getLayAmountAvailable()));
+			startIndex++; i++;
 		}
-		/*
-		 * for (InflatedCompletePrice p : r.getPrices()) {
-		 * result.add(pair(p.getPrice(), p.getLayAmountAvailable())); }
-		 */
 		return result;
 	}
 }

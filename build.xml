@@ -37,7 +37,7 @@
 		<pathelement location="${build.test.dir}" />
 		<fileset dir="${lib.dir}" includes="*.jar"/>
 	</path>
-	
+
 
 	<!-- IVY targets -->
 	<target name="download-ivy" unless="offline">
@@ -48,13 +48,8 @@
 	</target>
 
 	<target name="init-ivy" depends="download-ivy">
-		<!-- try to load ivy here from ivy home, in case the user has not already dropped
-		              it into ant's lib dir (note that the latter copy will always take precedence).
-		              We will not fail as long as local lib dir exists (it may be empty) and
-		              ivy is in at least one of ant's lib dir or the local lib dir. -->
 		<path id="ivy.lib.path">
 			<fileset dir="${ivy.jar.dir}" includes="*.jar"/>
-
 		</path>
 		<taskdef resource="org/apache/ivy/ant/antlib.xml"
 		                 uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path"/>
@@ -94,13 +89,13 @@
 		<delete dir="${build.test.dir}" />
 		<delete dir="${coverage.report.dir}" />
 		<delete file="cobertura.ser" />
-		
+
 	</target>
-	
+
 	<target name="clean-lib">
 		<delete>
-					<fileset dir="lib" includes="*.jar" excludes="generated.jar"/>
-				</delete>
+			<fileset dir="lib" includes="*.jar" excludes="generated.jar"/>
+		</delete>
 	</target>
 
 	<!-- COMPILE all tests -->

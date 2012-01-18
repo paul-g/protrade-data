@@ -54,7 +54,6 @@ public class BetfairExchangeHandler extends BetfairConnectionHandler {
 				}
 				for (MarketSummary ms : markets) {
 					if (ms.getMarketName().equals(MATCH_ODDS_MARKET_NAME)) {
-						// marketOdds = ms;
 						marketId = ms.getMarketId();
 						exchange = ms.getExchangeId() == 1 ? Exchange.UK : Exchange.AUS;
 					}
@@ -75,7 +74,6 @@ public class BetfairExchangeHandler extends BetfairConnectionHandler {
 	private static MOddsMarketData getMatchOddsData(boolean getNames,
 			int marketId, Exchange exchange) throws Exception {
 		MOddsMarketData modds = new MOddsMarketData();
-		// marketOdds.getExchangeId() == 1 ? Exchange.UK : Exchange.AUS;
 		Market selectedMarket = null;
 		if (getNames) {
 			selectedMarket = ExchangeAPI.getMarket(exchange, apiContext,
@@ -166,7 +164,6 @@ public class BetfairExchangeHandler extends BetfairConnectionHandler {
 			log.info("Error fetching market info for the match - "
 					+ e.getMessage());
 		}
-		// System.out.println("After Set odds get: " + queriesNumber);
 		return setBettingData;
 	}
 
@@ -181,14 +178,6 @@ public class BetfairExchangeHandler extends BetfairConnectionHandler {
 		int mOddsMarketId = -1;
 		Exchange exchange = Exchange.UK;
 
-		/*
-		 * for (EventMarketBetfair emb : eventBetfair.getChildren()) { if (emb
-		 * instanceof MarketBetfair &&
-		 * emb.getName().equals(SET_BETTING_MARKET_NAME)) setBettingMarketId =
-		 * emb.getBetfairId(); if (emb instanceof MarketBetfair &&
-		 * emb.getName().equals(MATCH_ODDS_MARKET_NAME)) mOddsMarketId =
-		 * emb.getBetfairId(); }
-		 */
 		try {
 			if (setBettingMarketId == -1 || mOddsMarketId == -1) {
 				GetEventsResp resp = GlobalAPI.getEvents(apiContext,
@@ -223,7 +212,6 @@ public class BetfairExchangeHandler extends BetfairConnectionHandler {
 		}
 		completeMarketData.setmOddsMarketData(mOddsData);
 		completeMarketData.setSetBettingMarketData(setBettingData);
-		// System.out.println("After complete odds get: " + queriesNumber);
 		return completeMarketData;
 	}
 
@@ -327,11 +315,6 @@ public class BetfairExchangeHandler extends BetfairConnectionHandler {
 		return result;
 	}
 
-	/*
-	 * public void getBetHistory() { // ExchangeAPI.getBetHistory(context, int
-	 * marketId, ) }
-	 */
-
 	public static MOddsMarketData getCompressedMatchOddsMarketData(
 			LiveMatch match) {
 		EventBetfair eventBetfair = match.getEventBetfair();
@@ -375,32 +358,20 @@ public class BetfairExchangeHandler extends BetfairConnectionHandler {
 			log.info("Error fetching market info for the match - "
 					+ e.getMessage());
 		}
-		// System.out.println("After Match odds get: " + queriesNumber);
 		return modds;
 	}
 
 	private static MOddsMarketData getCompressedMatchOddsData(boolean getNames,
 			int marketId, Exchange exchange, String pl1LastName, int pl1SelectionId) throws Exception {
 		MOddsMarketData modds = new MOddsMarketData();
-		// marketOdds.getExchangeId() == 1 ? Exchange.UK : Exchange.AUS;
 		Market selectedMarket = null;
 		if (getNames)
 			selectedMarket = ExchangeAPI.getMarket(exchange, apiContext,
 					marketId);
-		/*
-		 * InflatedMarketPrices prices =
-		 * ExchangeAPI.getMarketPrices(Exchange.UK, apiContext, marketId);
-		 */
 		InflatedCompleteMarketPrices prices = ExchangeAPI
 				.getCompleteMarketPrices(exchange, apiContext, marketId);
 
 		modds.setExchange(exchange.toString());
-		// modds.setDate(selectedMarket.getMarketTime().getTime());
-		// modds.setMatchStatus(selectedMarket.getMarketStatus().toString());//prices.getMarketStatus()
-
-		// modds.setMatchStatus(prices.getMarketStatus());
-
-		// modds.setLocation(selectedMarket.getCountryISO3());
 		modds.setDelay(prices.getInPlayDelay());
 
 		int i = 0;
@@ -456,12 +427,6 @@ public class BetfairExchangeHandler extends BetfairConnectionHandler {
 			result.add(pair(p.getPrice(), p.getBackAmountAvailable()));
 			startIndex--; i++;
 		}		
-		/*
-		for (int i = 2; i >= 0; i--) {
-			InflatedCompletePrice p = r.getPrices().get(i);
-			result.add(pair(p.getPrice(), p.getBackAmountAvailable()));
-		}
-		*/
 		return result;
 	}
 
@@ -474,12 +439,6 @@ public class BetfairExchangeHandler extends BetfairConnectionHandler {
 			result.add(pair(p.getPrice(), p.getLayAmountAvailable()));
 			startIndex++; i++;
 		}
-		/*
-		for (int i = 3; i < 6; i++) {
-			InflatedCompletePrice p = r.getPrices().get(i);
-			result.add(pair(p.getPrice(), p.getBackAmountAvailable()));
-		}
-		*/
 		return result;
 	}
 }

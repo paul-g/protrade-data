@@ -20,6 +20,7 @@ To install the project:
 ```
 cd workspace
 mkdir protrade-data
+cd protrade-data
 git init
 git remote add origin git@github.com:paul-g/protrade-data.git
 git pull -u origin master

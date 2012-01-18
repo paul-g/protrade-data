@@ -81,6 +81,7 @@
 
 	<!-- JAR and RUN tasks to create & run a jar, running the tests first -->
 	<target name="jar" depends="compile,unit-tests,system-tests">
+	  <mkdir dir="${build.jar.dir}" />
 		<jar destfile="${build.jar.dir}/protrade-data.jar" basedir="${build.prod.dir}" excludes="log4j.properties"/>
 	</target>
 

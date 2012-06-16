@@ -13,8 +13,8 @@ public final class ScoreDemo {
 
 	private static final int REPETITIONS = 1;
 	private static final Logger log = Logger.getLogger(ScoreDemo.class);
-	private static String player1 = "RufinGuillaume";
-	private static String player2 = "PhauBjorn";
+	private static String player1 = "CilicMarin";
+	private static String player2 = "QuerreySam";
 	
 	private static String scores = null;
 

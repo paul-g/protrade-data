@@ -14,6 +14,7 @@ public final class LivexScoreFetcher {
 
 	private static final String FINISHED_URL = "http://www.livexscores.com/xml/tfinished.txt";
 	private static final String ALL_URL = "http://www.livexscores.com/xml/tall.txt";
+	private static final String IN_PLAY_URL = "http://www.livexscores.com/xml/tzmena.txt";
 	private static final String YESTERDAY_URL = "http://www.livexscores.com/xml/tyesterday.txt";
 
 	private LivexScoreFetcher() {
@@ -29,6 +30,8 @@ public final class LivexScoreFetcher {
 		case FINISHED:
 			address = FINISHED_URL;
 			break;
+		case IN_PLAY:
+			address= IN_PLAY_URL;
 		default:
 			address = ALL_URL;
 			break;

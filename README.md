@@ -5,17 +5,11 @@ This is the main data fetching API for the protrade tennis trading application. 
 
 # Installation instructions
 
-The build process uses make and ant.
-The Makefile only provides a wrapper for the ant script, so it is not really required, but provides a few simple tasks to pass some parameters to the ant runtime.
-
-To install ant, follow the instructions here: http://ant.apache.org/.
-
-To list all available tasks:
-`ant -p` 
+The build process uses GNU make(http://www.gnu.org/software/make/) and ant(http://ant.apache.org/).
 
 To install the project:
 
-## Get the code from Github (i.e. here)
+## Checkout the code
 
 ```
 cd workspace
@@ -54,17 +48,13 @@ username:=yourusername
 password:=yourencryptedpassword
 ```
 
-To help encrypt the password, a utility class is provided under:  org.ic.protrade.authentication.Encrypt.java.
-
-A simple task will be added soon.
-
-### Done
-
-If everything went well, you should be done at this stage :p
+To help encrypt the password, a utility class is provided under:  org.ic.protrade.authentication.Encrypt.
 
 # Usage
 
-After you have fetched the project, made the desired modification etc. , you can use the provided `ant jar` task to create a jar which you can use in your other projects. 
+`ant jar` packages the project.
+
+You can also run the recording demo: `java -cp bin/:lib/*:lib/static/* org/ic/protrade/data/demo/RecordingDemo`
 
 ###Note!
-The protrade-data.jar created with `ant jar` will not include the dependencies (anything from the lib/ folder), but only the class hierarchy.
+The protrade-data.jar created with `ant jar` will not include any dependencies from lib/.

@@ -1,9 +1,7 @@
 package org.ic.protrade.data.fetchers;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
+import java.io.*;
+import java.net.*;
 import java.util.Scanner;
 
 import org.apache.log4j.Logger;
@@ -20,8 +18,8 @@ public final class LivexScoreFetcher {
 	private LivexScoreFetcher() {
 	}
 
-	public static String fetchScores(LivexMatchType matchType)
-			throws IOException {
+	public static String fetchScores(final LivexMatchType matchType) throws IOException {
+		log.debug("Starting to fetch scores");
 		String address;
 		switch (matchType) {
 		case YESTERDAY:
@@ -31,22 +29,24 @@ public final class LivexScoreFetcher {
 			address = FINISHED_URL;
 			break;
 		case IN_PLAY:
-			address= IN_PLAY_URL;
+			address = IN_PLAY_URL;
 		default:
 			address = ALL_URL;
 			break;
 		}
 
-		URL url = new URL(address);
-		URLConnection conn = url.openConnection();
+		final URL url = new URL(address);
+		final URLConnection conn = url.openConnection();
 
-		StringBuilder scoresBuilder = new StringBuilder();
-		InputStream is = conn.getInputStream();
-		Scanner sc = new Scanner(is);
+		final StringBuilder scoresBuilder = new StringBuilder();
+		final InputStream is = conn.getInputStream();
+		final Scanner sc = new Scanner(is);
 		while (sc.hasNext()) {
 			scoresBuilder.append(sc.next());
 		}
-		return scoresBuilder.toString();
+		final String scores = scoresBuilder.toString();
+		log.debug("Scores fetched: " + scores);
+		return scores;
 	}
 
 	public enum LivexMatchType {

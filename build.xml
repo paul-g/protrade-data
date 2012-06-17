@@ -7,7 +7,6 @@
 	<property name="unit.test.dir" value="tests-unit" />
 	<property name="system.test.dir" value="tests-system" />
 	<property name="lib.dir" value="lib"/>
-	<property name="lib.static.dir" value="${lib.dir}/static"/>
 	<property file="build.properties" />
 	<property name="instrumented.dir" value="build/instrumented-classes" />
 
@@ -37,7 +36,6 @@
 		<pathelement location="${build.prod.dir}" />
 		<pathelement location="${build.test.dir}" />
 		<fileset dir="${lib.dir}" includes="*.jar"/>
-		<fileset dir="${lib.static.dir}" includes="*.jar"/>
 	</path>
 
 

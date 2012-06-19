@@ -34,9 +34,11 @@ public final class RecordingDemo {
 			username = args[3];
 			recordPath = args[4];
 		} else {
+			System.out.format("\nUsage:\n");
 			System.out
-					.format("Usage: %s <playerOneLastname> <playerTwoLastname> <updateIntervalMs> <betfairUsername> <pathToRecordingFile>\n",
+					.format("   %s <playerOneLastname> <playerTwoLastname> <updateIntervalMs> <betfairUsername> <pathToRecordingFile>\n",
 							RecordingDemo.class.getSimpleName());
+			help();
 			System.exit(1);
 		}
 
@@ -96,6 +98,27 @@ public final class RecordingDemo {
 		} else {
 			System.out.println("Match not found on Betfair!");
 		}
+
+	}
+
+	private static void help() {
+		System.out.format("\n");
+		System.out.format("   playerOne[Two]Lastname - e.g. Djokovic (order is not important)\n");
+		System.out.format("   updateIntervalMs       - the interval at which to record data in milliseconds\n");
+		System.out
+				.format("   betfairUsername        - your betfair user account, you will be prompted for your password at startup\n");
+		System.out
+				.format("   pathToRecordingFile    - the absolute path to the file which will contain the recording\n");
+		System.out.format("\n");
+		System.out.format("Example:\n");
+		final String command = "java -cp \"build/prod:lib/*\" " + RecordingDemo.class.getName();
+		System.out.format("   %s Djokovic Nadal 2000 john /home/doe/recording.dat", command);
+		System.out.println();
+		System.out.println();
+		System.out
+				.format("     This will try to record betfair & score data from a match between Djokovic & Nadal. Data will be \n");
+		System.out
+				.format("     recorded every 2 seconds, using the betfair account \"john\" and stored in the file recording.dat.\n\n");
 
 	}
 

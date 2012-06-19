@@ -54,7 +54,7 @@ To help encrypt the password, a utility class is provided under:  org.ic.protrad
 
 `ant jar` packages the project.
 
-You can also run the recording demo: `java -cp bin/:lib/*:lib/static/* org/ic/protrade/data/demo/RecordingDemo`
+You can also run the recording demo: `java -cp "build/prod/:lib/*" org/ic/protrade/data/demo/RecordingDemo`
 
 ###Note!
 The protrade-data.jar created with `ant jar` will not include any dependencies from lib/.

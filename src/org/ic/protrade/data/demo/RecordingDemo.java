@@ -68,7 +68,6 @@ public final class RecordingDemo {
 
 				final String p1Name = m.getPlayerOne().getLastname();
 				final String p2Name = m.getPlayerTwo().getLastname();
-				// System.out.format(" '%s' '%s' '%s' \n", m.getName(), p1Name, p2Name);
 				if (((p1Name.equals(player1) && p2Name.equals(player2)) || (p1Name.equals(player2) && p2Name
 						.equals(player1)))) {
 					match = m;
@@ -86,17 +85,18 @@ public final class RecordingDemo {
 			match.addMarketData(BetfairExchangeHandler.getCompressedMatchOddsMarketData(match));
 
 			System.out.format("Starting recording in: '%s'\n", recordPath);
-
-			fout.write(new String("Time, Player, LPM, Points, Set1, Set2, Set3, Set4, Set5, Server\n").getBytes());
-			while (true) {
-				try {
-					fetchScores(match);
-				} catch (final Exception e) {
-					e.printStackTrace();
-				}
-			}
 		} else {
-			System.out.println("Match not found on Betfair!");
+			System.out.format("Match not found on betfair. Market data will not be recorded!\n");
+		}
+
+		fout.write(new String("Time, Player, LPM, Points, Set1, Set2, Set3, Set4, Set5, Server\n").getBytes());
+
+		while (true) {
+			try {
+				fetchScores(match);
+			} catch (final Exception e) {
+				System.out.println(e.getMessage());
+			}
 		}
 
 	}
@@ -119,10 +119,19 @@ public final class RecordingDemo {
 				.format("     This will try to record betfair & score data from a match between Djokovic & Nadal. Data will be \n");
 		System.out
 				.format("     recorded every 2 seconds, using the betfair account \"john\" and stored in the file recording.dat.\n\n");
+		System.out.println();
+		System.out.format("Recorded fields:\n");
+		System.out.format("   Two entries are recorded at every update, one for each player.\n");
+		System.out.format("     time              - system time at which the recording was taken\n");
+		System.out.format("     player            - the player's name\n");
+		System.out.format("     LPM               - lowest price matched\n");
+		System.out.format("     Points, Set[1..5] - match score\n");
+		System.out.format("     isServing         - 1 if player is serving, 0 if opponent is serving, or -1 \n");
+		System.out.format("                         if this is undefined (e.g. when the match is over)\n\n");
 
 	}
 
-	private static void fetchScores(final LiveMatch liveMatch) throws IOException {
+	private static void fetchScores(final LiveMatch liveMatch) throws IOException, NoSuchMatchException {
 		String scores = null;
 		try {
 			Thread.sleep(timeout);
@@ -130,19 +139,15 @@ public final class RecordingDemo {
 			e1.printStackTrace();
 		}
 
-		liveMatch.addMarketData(BetfairExchangeHandler.getCompressedMatchOddsMarketData(liveMatch));
-		Match match = new Match("", "", "", "");
-		try {
-			scores = LivexScoreFetcher.fetchScores(LivexMatchType.ALL);
+		if (liveMatch != null) {
+			liveMatch.addMarketData(BetfairExchangeHandler.getCompressedMatchOddsMarketData(liveMatch));
+		}
 
-			if (scores != null) {
-				match = LivexScoreParser.getMatch(player1, player2, scores);
-			}
-		} catch (final IOException e) {
-			e.printStackTrace();
-		} catch (final NoSuchMatchException e) {
-			System.err.println(e.getMessage());
-			e.printStackTrace();
+		Match match = new Match();
+
+		scores = LivexScoreFetcher.fetchScores(LivexMatchType.ALL);
+		if (scores != null) {
+			match = LivexScoreParser.getMatch(player1, player2, scores);
 		}
 
 		final String data = writeData(match, liveMatch);
@@ -153,10 +158,24 @@ public final class RecordingDemo {
 
 	private static String writeData(final Match match, final LiveMatch liveMatch) {
 		final long timestamp = System.currentTimeMillis();
-		final String player1Data = String.format(" %d, %s, %s, %s\n", timestamp, liveMatch.getPlayerOne(), liveMatch
-				.getLastMarketData().getLastPriceMatched(PlayerEnum.PLAYER1), match.getPlayer1Score());
-		final String player2Data = String.format(" %d, %s, %s, %s\n", timestamp, liveMatch.getPlayerTwo(), liveMatch
-				.getLastMarketData().getLastPriceMatched(PlayerEnum.PLAYER2), match.getPlayer2Score());
-		return player1Data + player2Data;
+
+		String data = "";
+
+		for (final PlayerEnum p : PlayerEnum.values()) {
+
+			final String playerOne = (liveMatch == null ? getDefaultPlayerName(p) : liveMatch.getPlayer(p).toString());
+
+			final double lastPriceMatched = (liveMatch == null ? -1.0 : liveMatch.getLastPriceMatched(p));
+			data += String.format(" %d, %s, %s, %s, %d\n", timestamp, playerOne, lastPriceMatched,
+					match.getPlayerScore(p), match.isPlayerServing(p));
+		}
+
+		return data;
+	}
+
+	private static String getDefaultPlayerName(final PlayerEnum p) {
+		if (p == PlayerEnum.PLAYER1)
+			return player1;
+		return player2;
 	}
 }

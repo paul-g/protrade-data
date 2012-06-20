@@ -2,10 +2,7 @@ package org.ic.protrade.data.match;
 
 import static org.ic.protrade.data.match.PlayerEnum.casePlayer;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.ic.protrade.data.MatchScore;
 import org.ic.protrade.data.exceptions.MatchNotFinishedException;
@@ -41,15 +38,15 @@ public abstract class Match {
 		return statisticsMap;
 	}
 
-	public void setStatisticsMap(Map<String, String[][]> statistics) {
-		this.statisticsMap = statistics;
+	public void setStatisticsMap(final Map<String, String[][]> statistics) {
+		statisticsMap = statistics;
 	}
 
 	public String[] getPlayerOneWonLost() {
 		return playerOneWonLost;
 	}
 
-	public void setPlayerOneWonLost(String[] playerOneWonLost) {
+	public void setPlayerOneWonLost(final String[] playerOneWonLost) {
 		this.playerOneWonLost = playerOneWonLost;
 	}
 
@@ -57,11 +54,11 @@ public abstract class Match {
 		return playerTwoWonLost;
 	}
 
-	public void setPlayerTwoWonLost(String[] playerTwoWonLost) {
+	public void setPlayerTwoWonLost(final String[] playerTwoWonLost) {
 		this.playerTwoWonLost = playerTwoWonLost;
 	}
 
-	public Player getPlayer(PlayerEnum player) {
+	public Player getPlayer(final PlayerEnum player) {
 		return casePlayer(player, player1, player2);
 	}
 
@@ -77,17 +74,21 @@ public abstract class Match {
 		return score;
 	}
 
-	public void setScore(Score score) {
+	public void setScore(final Score score) {
 		this.score = score;
 	}
 
-	public MOddsMarketData getLastMarketData() {
-		if (this.marketDatas.size() == 0)
-			return null;
-		return this.marketDatas.get(this.marketDatas.size() - 1);
+	public double getLastPriceMatched(final PlayerEnum player) {
+		return (getLastMarketData() == null ? -1.0 : getLastMarketData().getLastPriceMatched(player));
 	}
 
-	public void setMarketDatas(List<MOddsMarketData> marketDatas) {
+	public MOddsMarketData getLastMarketData() {
+		if (marketDatas.size() == 0)
+			return null;
+		return marketDatas.get(marketDatas.size() - 1);
+	}
+
+	public void setMarketDatas(final List<MOddsMarketData> marketDatas) {
 		this.marketDatas = marketDatas;
 	}
 
@@ -96,19 +97,19 @@ public abstract class Match {
 	}
 
 	public String getFilename() {
-		return this.filename;
+		return filename;
 	}
 
-	public String getScoreAsString(PlayerEnum player) {
+	public String getScoreAsString(final PlayerEnum player) {
 		return score.toString(player);
 	}
 
-	public void setPlayer1(Player player) {
-		this.player1 = player;
+	public void setPlayer1(final Player player) {
+		player1 = player;
 	}
 
-	public void setPlayer2(Player player) {
-		this.player2 = player;
+	public void setPlayer2(final Player player) {
+		player2 = player;
 	}
 
 	public PlayerEnum getServer() {
@@ -119,11 +120,11 @@ public abstract class Match {
 		return setBettingFilename;
 	}
 
-	public void setSetBettingFilename(String setBettingFilename) {
+	public void setSetBettingFilename(final String setBettingFilename) {
 		this.setBettingFilename = setBettingFilename;
 	}
 
-	public void setCurrentSet(int currentSet) {
+	public void setCurrentSet(final int currentSet) {
 		this.currentSet = currentSet;
 	}
 
@@ -131,7 +132,7 @@ public abstract class Match {
 		return currentSet;
 	}
 
-	public void setImpossibleScores(List<MatchScore> impossibleScores) {
+	public void setImpossibleScores(final List<MatchScore> impossibleScores) {
 		this.impossibleScores = impossibleScores;
 	}
 

@@ -15,14 +15,14 @@ public class LivexScoreParserTest extends ParserTest {
 	public void testFetchScores() throws IOException, NoSuchMatchException {
 		String test = getTestString(TestManager.getScoreServe1Path());
 		Match m = LivexScoreParser.getMatch("Keothavong", "Hantuchova", test);
-		assertEquals("00,1,0,0,0,0,", m.getPlayer1Score());
-		assertEquals("00,2,0,0,0,0,", m.getPlayer2Score());
+		assertEquals("00, 1, 0, 0, 0, 0", m.getPlayer1Score());
+		assertEquals("00, 2, 0, 0, 0, 0", m.getPlayer2Score());
 		assertEquals(PlayerEnum.PLAYER1, m.getServingPlayer());
 
 		test = getTestString(TestManager.getScoreServe2Path());
 		m = LivexScoreParser.getMatch("Keothavong", "Hantuchova", test);
-		assertEquals("40,0,0,0,0,0,", m.getPlayer1Score());
-		assertEquals("15,2,0,0,0,0,", m.getPlayer2Score());
+		assertEquals("40, 0, 0, 0, 0, 0", m.getPlayer1Score());
+		assertEquals("15, 2, 0, 0, 0, 0", m.getPlayer2Score());
 		assertEquals(PlayerEnum.PLAYER2, m.getServingPlayer());
 
 	}

@@ -68,8 +68,8 @@ public final class RecordingDemo {
 
 				final String p1Name = m.getPlayerOne().getLastname();
 				final String p2Name = m.getPlayerTwo().getLastname();
-				if (((p1Name.equals(player1) && p2Name.equals(player2)) || (p1Name.equals(player2) && p2Name
-						.equals(player1)))) {
+				if (((p1Name.contains(player1) && p2Name.contains(player2)) || (p1Name.contains(player2) && p2Name
+						.contains(player1)))) {
 					match = m;
 					break;
 				}
